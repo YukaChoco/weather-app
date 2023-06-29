@@ -4,7 +4,8 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
+  /* 背景色↓ */
+  --background-start-rgb: 215, 235, 255;
   --background-end-rgb: 255, 255, 255;
 }
 
