@@ -1,5 +1,4 @@
 import { ImageResponse } from 'next/server'
-import { weather } from './page';
 
 // Route segment config
 export const runtime = 'edge'
@@ -13,7 +12,7 @@ export const contentType = 'image/png'
 
 // Image generation
 export default function Icon() {
-    const weatherState = weather;
+    const weatherState = "晴れ";
     let icon = "-";
 
     if (weatherState === "晴れ") {
