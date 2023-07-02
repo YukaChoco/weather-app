@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { weather } from '../page';
 
 interface City {
   latitude: number,
@@ -43,6 +44,20 @@ type newType = {
 }
 
 export default function Home() {
+    let weatherState = weather;
+    let icon = "-";
+
+    if (weatherState === "晴れ") {
+        icon = "🌞";
+    } else if (weatherState === "晴れ時々曇り") {
+        icon = "🌤";
+    } else if (weatherState === "曇り") {
+        icon = "☁";
+    } else if (weatherState === "雨") {
+        icon = "☔";
+    } else if (weatherState === "雪") {
+        icon = "❄";
+    }
   const [nowWeather, setNowWeather] = useState<string>('-');
 
   const tokyo: City = {
@@ -135,5 +150,3 @@ export default function Home() {
     </>
   )
 }
-
-export const weather: string = "A";

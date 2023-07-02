@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/server'
+import { weather } from './page';
 
 // Route segment config
 export const runtime = 'edge'
@@ -12,7 +13,21 @@ export const contentType = 'image/png'
 
 // Image generation
 export default function Icon() {
-    const weather:string = "晴れ"
+    const weatherState = weather;
+    let icon = "-";
+
+    if (weatherState === "晴れ") {
+        icon = "🌞";
+    } else if (weatherState === "晴れ時々曇り") {
+        icon = "🌤";
+    } else if (weatherState === "曇り") {
+        icon = "☁";
+    } else if (weatherState === "雨") {
+        icon = "☔";
+    } else if (weatherState === "雪") {
+        icon = "❄";
+    }
+    
     return new ImageResponse(
         (
             // ImageResponse JSX element
@@ -28,7 +43,7 @@ export default function Icon() {
                     color: 'white',
                 }}
             >
-                {weather==="晴れ"?"🌞":weather==="晴れ時々曇り"?"🌤":weather==="曇り"?"☁":weather==="雨"?"☔":weather==="雪"?"❄":weather==="雨"?"☔":"-"}
+                {icon}
             </div>
         ),
         // ImageResponse options
