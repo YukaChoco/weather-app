@@ -136,4 +136,4 @@ export default function Home() {
   )
 }
 
-export const weather: string = "A";
+export const weather: string = "晴れ";
