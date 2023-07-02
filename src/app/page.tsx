@@ -103,11 +103,11 @@ export default function Home() {
         return "雨"
       case 85:
       case 86:
-        return "豪雪"
+        return "雪"
       case 95:
       case 96:
       case 99:
-        return "雷雨"
+        return "雨"
       default:
         return "-"
     }
