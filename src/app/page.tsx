@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 interface City {
   latitude: number,
@@ -32,12 +33,12 @@ type newType = {
   timezone_abbreviation: string;
   elevation: number;
   hourly_units: {
-      time: string;
-      weathercode: string;
+    time: string;
+    weathercode: string;
   };
   hourly: {
-      time: Date[],
-      weathercode: number[]
+    time: Date[],
+    weathercode: number[]
   };
 }
 
@@ -63,7 +64,7 @@ export default function Home() {
     const body = await response.json() as newType
     console.log(body);
 
-    const date= new Date();
+    const date = new Date();
     console.log(date.getHours());
 
     return body.hourly.weathercode[date.getHours()];
@@ -116,16 +117,21 @@ export default function Home() {
     fetchWeather(tokyo).then((res) => {
       const weathercode = res
       setNowWeather(convertWeathercodetoText(weathercode));
-    }).catch(e=>console.log(e))
+    }).catch(e => console.log(e))
   }, [])
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="">
-        <button onClick={() => fetchWeather(tokyo)}>aiueo</button>
-        {/* {nowWeather && nowWeather.timezone} */}
-        {nowWeather}
-      </div>
-    </main>
+    <>
+      <Head>
+        <title>weather-icon</title>
+        <link rel="icon" href="/icon?<generated>" type="image/png" sizes="32x32" />
+      </Head>
+      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <div className="">
+          <button onClick={() => fetchWeather(tokyo)}>aiueo</button>
+          {nowWeather}
+        </div>
+      </main>
+    </>
   )
 }
