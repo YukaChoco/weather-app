@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useSearchParams } from 'next/navigation'
+import { ConvertWeathercodetoText } from '../components/ConvertWeathercodetoText';
 
 interface City {
   latitude: number,
@@ -46,7 +47,7 @@ type newType = {
 export default function Location() {
 
   const searchParams = useSearchParams();
-  const [nowWeather, setNowWeather] = useState<string>('-');
+  const [nowWeather, setNowWeather] = useState<number>(-1);
 
   const tokyo: City = {
     latitude: 35.0167,       // 緯度
@@ -79,7 +80,7 @@ export default function Location() {
     fetchWeather(tokyo).then((res) => {
       const weathercode = res;
       if (typeof weathercode === 'number') {
-        setNowWeather(convertWeathercodetoText(weathercode));
+        setNowWeather(weathercode);
       }
     }).catch(e => console.log(e))
   }, [tokyo])
@@ -97,7 +98,8 @@ export default function Location() {
         </Head>
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
           <div className="">
-            {nowWeather}
+            <ConvertWeathercodetoText weathercode={nowWeather}></ConvertWeathercodetoText>
+            
           </div>
         </main>
       </>
@@ -111,49 +113,5 @@ export default function Location() {
         </span>
       </div>
     )
-  }
-}
-
-
-const convertWeathercodetoText = (weathercode: number) => {
-  switch (weathercode) {
-    case 0:
-      return "晴れ"
-    case 1:
-    case 2:
-    case 3:
-      return "晴れ時々曇り"
-    case 45:
-    case 48:
-      return "曇り"
-    case 51:
-    case 53:
-    case 55:
-    case 56:
-    case 57:
-    case 61:
-    case 63:
-    case 65:
-    case 66:
-    case 67:
-      return "雨"
-    case 71:
-    case 73:
-    case 75:
-    case 77:
-      return "雪"
-    case 80:
-    case 81:
-    case 82:
-      return "雨"
-    case 85:
-    case 86:
-      return "雪"
-    case 95:
-    case 96:
-    case 99:
-      return "雨"
-    default:
-      return "-"
   }
 }
