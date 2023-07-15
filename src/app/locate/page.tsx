@@ -65,7 +65,8 @@ export default function Location() {
     const url = `https://api.open-meteo.com/v1/forecast?${queries}`;
     const response = await fetch(url);
     console.log(response);
-    const body = await response.json() as newType
+    const body = await response.json() as newType // https://zenn.dev/uzimaru0000/articles/json-type-validation あとで修正
+    //もしくは axios
     console.log(body);
     console.log("query");
     const date = new Date();
@@ -81,7 +82,7 @@ export default function Location() {
         setNowWeather(convertWeathercodetoText(weathercode));
       }
     }).catch(e => console.log(e))
-  }, [])
+  }, [tokyo])
 
   if (searchParams.has("lat") && searchParams.has("lng")) {
     const lat = searchParams.get("lat");
