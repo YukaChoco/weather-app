@@ -2,29 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useSearchParams } from 'next/navigation'
+import { ConvertWeathercodetoText } from '../components/ConvertWeathercodetoText';
 
 interface City {
   latitude: number,
   longitude: number,
 }
 
-interface weather {
-  latitude: number;
-  longitude: number;
-  generationtime_ms: number;
-  utc_offset_seconds: number;
-  timezone: string;
-  timezone_abbreviation: string;
-  elevation: number;
-  daily_units: {
-    time: string;
-    weathercode: string;
-  };
-  daily: {
-    time: Date[],
-    weathercode: number[]
-  }
-}
 type newType = {
   latitude: number;
   longitude: number;
@@ -46,48 +30,62 @@ type newType = {
 export default function Location() {
 
   const searchParams = useSearchParams();
-  const [nowWeather, setNowWeather] = useState<string>('-');
+  const [nowWeather, setNowWeather] = useState<number>(-1);
+  const [location, setLocation] = useState<City>({ latitude: 0, longitude: 0, });
+  const [error, setError] = useState<number>(-1);
 
-  const tokyo: City = {
-    latitude: 35.0167,       // 緯度
-    longitude: 135.9667,  // 経度
-  };
-
-  const fetchWeather = async (city: City) => {
+  const fetchWeather = async () => {
     const queries = new URLSearchParams({
-      latitude: city.latitude.toString(),
-      longitude: city.longitude.toString(),
+      latitude: location.latitude.toString(),
+      longitude: location.longitude.toString(),
       hourly: "weathercode",
       timezone: "Asia/Tokyo",
     });
 
-    console.log(queries);
+    console.log("latitude=" + location.latitude + ",longitude=" + location.longitude + " の天気を取得しました");
+
     const url = `https://api.open-meteo.com/v1/forecast?${queries}`;
     const response = await fetch(url);
-    console.log(response);
-    const body = await response.json() as newType
-    console.log(body);
-    console.log("query");
-    const date = new Date();
-    console.log(date.getHours());
+    const body = await response.json() as newType;
 
-    return body.hourly.weathercode[date.getHours()];
+    const date = new Date();
+
+    const weathercode = body.hourly.weathercode[date.getHours()];
+    setNowWeather(weathercode);
   }
 
   useEffect(() => {
-    fetchWeather(tokyo).then((res) => {
-      const weathercode = res;
-      if (typeof weathercode === 'number') {
-        setNowWeather(convertWeathercodetoText(weathercode));
+    fetchWeather();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location])
+
+  useEffect(() => {
+    const paramLat = searchParams.get("lat");
+    const paramLng = searchParams.get("lng");
+    console.log("lat=" + paramLat + " lng=" + paramLng);
+    if (paramLat === null || paramLng === null) {
+      setError(1);
+      console.log("ERROR:latとlngをパラメータに指定してください");
+    }
+    else {
+      const lat = parseInt(paramLat);
+      const lng = parseInt(paramLng);
+      if (lat < -90 || lat > 90) {
+        setError(2);
+        console.log("ERROR:latは-90から90の範囲で指定してください");
       }
-    }).catch(e => console.log(e))
-  }, [])
+      else if (lng < -180 || lng > 180) {
+        setError(3);
+        console.log("ERROR:lngは-180から180の範囲で指定してください");
+      }
+      else {
+        setError(0);
+        setLocation({ latitude: lat, longitude: lng });
+      }
+    }
+  }, [searchParams])
 
-  if (searchParams.has("lat") && searchParams.has("lng")) {
-    const lat = searchParams.get("lat");
-    const lng = searchParams.get("lng");
-    console.log("lat=" + lat + " lng=" + lng);
-
+  if (error == 0) {
     return (
       <>
         <Head>
@@ -96,10 +94,19 @@ export default function Location() {
         </Head>
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
           <div className="">
-            {nowWeather}
+            <ConvertWeathercodetoText weathercode={nowWeather}></ConvertWeathercodetoText>
           </div>
         </main>
       </>
+    )
+  }
+  else if (error == -1) {
+    return (
+      <div className='bg-gray-200 w-screen h-screen text-center flex'>
+        <span className='m-auto w-fit h-fit'>
+          ー Roading ー
+        </span>
+      </div>
     )
   }
   else {
@@ -110,49 +117,5 @@ export default function Location() {
         </span>
       </div>
     )
-  }
-}
-
-
-const convertWeathercodetoText = (weathercode: number) => {
-  switch (weathercode) {
-    case 0:
-      return "晴れ"
-    case 1:
-    case 2:
-    case 3:
-      return "晴れ時々曇り"
-    case 45:
-    case 48:
-      return "曇り"
-    case 51:
-    case 53:
-    case 55:
-    case 56:
-    case 57:
-    case 61:
-    case 63:
-    case 65:
-    case 66:
-    case 67:
-      return "雨"
-    case 71:
-    case 73:
-    case 75:
-    case 77:
-      return "雪"
-    case 80:
-    case 81:
-    case 82:
-      return "雨"
-    case 85:
-    case 86:
-      return "雪"
-    case 95:
-    case 96:
-    case 99:
-      return "雨"
-    default:
-      return "-"
   }
 }
