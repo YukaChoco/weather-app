@@ -3,29 +3,10 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useSearchParams } from 'next/navigation'
 import { ConvertWeathercodetoText } from '../components/ConvertWeathercodetoText';
+import { City } from '../entities/CoordinatesEntity';
+import { WeatherAPIProps } from '../entities/WeatherEntity';
 
-interface City {
-  latitude: number,
-  longitude: number,
-}
 
-type newType = {
-  latitude: number;
-  longitude: number;
-  generationtime_ms: number;
-  utc_offset_seconds: number;
-  timezone: string;
-  timezone_abbreviation: string;
-  elevation: number;
-  hourly_units: {
-    time: string;
-    weathercode: string;
-  };
-  hourly: {
-    time: Date[],
-    weathercode: number[]
-  };
-}
 
 export default function Location() {
 
@@ -46,7 +27,7 @@ export default function Location() {
 
     const url = `https://api.open-meteo.com/v1/forecast?${queries}`;
     const response = await fetch(url);
-    const body = await response.json() as newType;
+    const body = await response.json() as WeatherAPIProps;
 
     const date = new Date();
 
