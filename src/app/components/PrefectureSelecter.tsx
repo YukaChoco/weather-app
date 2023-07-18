@@ -1,7 +1,7 @@
 
-import { Prefectures } from '../entities/PrefecturesEntity'
+import { Prefectures } from '../domain/PrefecturesEntity'
 import prefectureData from '../data/prefectureData'
-import { City } from '../entities/CoordinatesEntity'
+import { City } from '../domain/CoordinatesEntity'
 
 export const PrefectureSelecter = ({ location }: { location: City }) => {
 

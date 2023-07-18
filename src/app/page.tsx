@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { PrefectureSelecter } from './components/PrefectureSelecter';
-import { City } from './entities/CoordinatesEntity';
+import { City } from './domain/CoordinatesEntity';
 
 export default function Home() {
 
