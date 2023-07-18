@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useSearchParams } from 'next/navigation'
-import { ConvertWeathercodetoText } from '../components/ConvertWeathercodetoText';
-import { City } from '../domain/CoordinatesEntity';
-import { WeatherAPIProps } from '../domain/WeatherEntity';
+import { ConvertWeathercodetoText } from '../_components/ConvertWeathercodetoText';
+import { City } from '../_domain/CoordinatesEntity';
+import { WeatherAPIProps } from '../_domain/WeatherEntity';
 
 
 
