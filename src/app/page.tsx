@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { PrefectureSelecter } from './components/PrefectureSelecter';
-import { City } from './entities/CoordinatesEntity';
+import { PrefectureSelecter } from './_components/PrefectureSelecter';
+import { City } from './_domain/CoordinatesEntity';
 
 export default function Home() {
 

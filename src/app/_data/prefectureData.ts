@@ -1,4 +1,4 @@
-import { Prefectures } from '../entities/PrefecturesEntity'
+import { Prefectures } from '../_domain/PrefecturesEntity'
 
 const prefectureData: Prefectures[] = [
     {

@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useSearchParams } from 'next/navigation'
-import { ConvertWeathercodetoText } from '../components/ConvertWeathercodetoText';
-import { City } from '../entities/CoordinatesEntity';
-import { WeatherAPIProps } from '../entities/WeatherEntity';
+import { ConvertWeathercodetoText } from '../_components/ConvertWeathercodetoText';
+import { City } from '../_domain/CoordinatesEntity';
+import { WeatherAPIProps } from '../_domain/WeatherEntity';
 
 
 
@@ -37,7 +37,7 @@ export default function Location() {
 
   useEffect(() => {
     fetchWeather();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location])
 
   useEffect(() => {
